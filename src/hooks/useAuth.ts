@@ -53,7 +53,6 @@ export function useAuth() {
     setIsLoading(true);
     try {
       // Implementasi login logic di sini
-      // Contoh simulasi:
       const userData: User = {
         id: `user-${Date.now()}`,
         name: email.split("@")[0],

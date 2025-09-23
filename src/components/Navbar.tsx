@@ -22,7 +22,7 @@ export default function Navbar({ className }: NavbarProps) {
         <h1 className="text-xl font-bold text-foreground">Novu App</h1>
       </div>
 
-      {/* Search Bar (Optional) */}
+      {/* Search Bar */}
       <div className="hidden md:flex flex-1 max-w-md mx-8">
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
