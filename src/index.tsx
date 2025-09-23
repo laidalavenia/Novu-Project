@@ -1,11 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+// import { Novu } from "@novu/api";
+
+// const novu = new Novu({
+//   secretKey: process.env["NOVU_SECRET_KEY"],
+// });
+
+// novu.trigger({
+//   workflowId: "onboarding-demo-workflow",
+//   to: "subscriber-id",
+//   payload: {},
+// });
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
