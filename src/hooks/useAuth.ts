@@ -78,20 +78,19 @@ export function useAuth() {
     localStorage.removeItem("user");
   };
 
-  // Untuk Novu - subscriber ID harus unique per user
   const getSubscriberId = (): string => {
-    // PRIORITAS 1: Gunakan dari environment variable jika ada
+    // Gunakan dari environment variable jika ada
     const envSubscriberId = process.env.REACT_APP_NOVU_SUBSCRIBER_ID;
     if (envSubscriberId) {
       return envSubscriberId;
     }
 
-    // PRIORITAS 2: Gunakan user ID dari login
+    // Gunakan user ID dari login
     if (user?.id) {
       return user.id;
     }
 
-    // PRIORITAS 3: Fallback jika belum ada user
+    // Fallback jika belum ada user
     let fallbackId = localStorage.getItem("novu-subscriber-id");
     if (!fallbackId) {
       fallbackId = `anonymous-${Date.now()}-${Math.random()

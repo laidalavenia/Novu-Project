@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import NotificationPopup from "./NotificationPopup"; 
-import { Inbox } from "@novu/react";
+import React, { useState, useEffect } from "react";
+import NotificationPopup from "./NotificationPopup";
+import { Inbox, useNotifications } from "@novu/react";
 import { Bell } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useAuth } from "../hooks/useAuth";
 
-interface NotificationData {
+interface NotificationInboxProps {
+  className?: string;
+}
+
+interface PopupNotification {
   id: string;
   title: string;
   body: string;
-  actions?: Array<{
+  actions: Array<{
     label: string;
-    url?: string;
-    isPrimary?: boolean;
+    url: string;
+    isPrimary: boolean;
   }>;
   createdAt: string;
-}
-
-interface NotificationInboxProps {
-  className?: string;
 }
 
 export default function NotificationInbox({
@@ -31,27 +31,141 @@ export default function NotificationInbox({
   const subscriberId = getSubscriberId();
 
   const [popupNotification, setPopupNotification] =
-    useState<NotificationData | null>(null);
+    useState<PopupNotification | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [hasShownInitialPopup, setHasShownInitialPopup] = useState(false);
+
+  // Use Novu's useNotifications hook to get notifications (only works inside NovuProvider)
+  let notifications: any[] = [];
+  let notificationsLoading = false;
+
+  try {
+    const notificationData = useNotifications();
+    notifications = notificationData.notifications || [];
+    notificationsLoading = notificationData.isLoading || false;
+  } catch (error) {
+    // If useNotifications fails (not inside NovuProvider), we'll use fallback
+    console.log("useNotifications not available, using fallback");
+  }
+
+  // Auto-show popup with REAL first notification from Novu
+  useEffect(() => {
+    if (
+      !isLoading &&
+      !notificationsLoading &&
+      subscriberId &&
+      !hasShownInitialPopup &&
+      notifications &&
+      notifications.length > 0
+    ) {
+      // Get the REAL first notification from Novu (not sample)
+      const firstNotification = notifications[0] as any;
+
+      // Debug: Log the REAL notification structure
+      console.log("REAL First notification from Novu:", firstNotification);
+      console.log("Available properties:", Object.keys(firstNotification));
+
+      // Format the REAL notification data
+      const formattedNotification = {
+        id: firstNotification?.id || Date.now().toString(),
+        title:
+          firstNotification?.subject ||
+          firstNotification?.title ||
+          firstNotification?.payload?.title ||
+          "New Notification",
+        body:
+          firstNotification?.body ||
+          firstNotification?.content ||
+          firstNotification?.payload?.body ||
+          firstNotification?.payload?.content ||
+          "You have a new notification",
+        actions:
+          firstNotification?.payload?.cta ||
+          firstNotification?.cta ||
+          firstNotification?.actions
+            ? [
+                {
+                  label:
+                    firstNotification?.payload?.cta?.label ||
+                    firstNotification?.cta?.label ||
+                    "View",
+                  url:
+                    firstNotification?.payload?.cta?.url ||
+                    firstNotification?.cta?.url ||
+                    "#",
+                  isPrimary: true,
+                },
+              ]
+            : [],
+        createdAt:
+          firstNotification?.createdAt ||
+          firstNotification?.created_at ||
+          new Date().toISOString(),
+      };
+
+      console.log("Formatted REAL notification:", formattedNotification);
+
+      // Show popup with real notification 
+      setTimeout(() => {
+        setPopupNotification(formattedNotification);
+        setIsPopupOpen(true);
+        setHasShownInitialPopup(true);
+      }, 1000);
+    } else if (
+      !isLoading &&
+      !notificationsLoading &&
+      subscriberId &&
+      !hasShownInitialPopup &&
+      (!notifications || notifications.length === 0)
+    ) {
+      // If no real notifications found, log it
+      console.log("No real notifications found in Novu");
+      setHasShownInitialPopup(true);
+    }
+  }, [
+    isLoading,
+    notificationsLoading,
+    subscriberId,
+    hasShownInitialPopup,
+    notifications,
+  ]);
 
   const handleNotificationClick = (notification: any) => {
+    console.log("Clicked notification:", notification);
+
     const formattedNotification = {
-      id: notification.id || Date.now().toString(),
-      title: notification.subject || notification.title || "New Notification",
+      id: notification?.id || Date.now().toString(),
+      title:
+        notification?.subject ||
+        notification?.title ||
+        notification?.payload?.title ||
+        "New Notification",
       body:
-        notification.body ||
-        notification.content ||
+        notification?.body ||
+        notification?.content ||
+        notification?.payload?.body ||
+        notification?.payload?.content ||
         "You have a new notification",
-      actions: notification.cta?.action
-        ? [
-            {
-              label: notification.cta.action.label || "View",
-              url: notification.cta.action.url,
-              isPrimary: true,
-            },
-          ]
-        : [],
-      createdAt: notification.createdAt || new Date().toISOString(),
+      actions:
+        notification?.payload?.cta || notification?.cta || notification?.actions
+          ? [
+              {
+                label:
+                  notification?.payload?.cta?.label ||
+                  notification?.cta?.label ||
+                  "View",
+                url:
+                  notification?.payload?.cta?.url ||
+                  notification?.cta?.url ||
+                  "#",
+                isPrimary: true,
+              },
+            ]
+          : [],
+      createdAt:
+        notification?.createdAt ||
+        notification?.created_at ||
+        new Date().toISOString(),
     };
 
     setPopupNotification(formattedNotification);
@@ -67,22 +181,38 @@ export default function NotificationInbox({
     console.error("REACT_APP_NOVU_APPLICATION_IDENTIFIER is not defined");
 
     return (
-      <div
-        className={cn(
-          "flex items-center justify-center p-2 text-muted-foreground",
-          className
-        )}
-      >
-        <Bell className="h-5 w-5" />
-      </div>
+      <>
+        <div
+          className={cn(
+            "flex items-center justify-center p-2 text-muted-foreground",
+            className
+          )}
+        >
+          <Bell className="h-5 w-5" />
+        </div>
+
+        <NotificationPopup
+          isOpen={isPopupOpen}
+          onClose={closePopup}
+          notification={popupNotification}
+        />
+      </>
     );
   }
 
-  if (isLoading) {
+  if (isLoading || notificationsLoading) {
     return (
-      <div className={cn("flex items-center justify-center p-2", className)}>
-        <Bell className="h-5 w-5 animate-pulse text-muted-foreground" />
-      </div>
+      <>
+        <div className={cn("flex items-center justify-center p-2", className)}>
+          <Bell className="h-5 w-5 animate-pulse text-muted-foreground" />
+        </div>
+
+        <NotificationPopup
+          isOpen={isPopupOpen}
+          onClose={closePopup}
+          notification={popupNotification}
+        />
+      </>
     );
   }
 
@@ -117,6 +247,13 @@ export default function NotificationInbox({
                 borderRadius: "calc(var(--radius) - 2px)",
                 boxShadow:
                   "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+              },
+              notification: {
+                backgroundColor: "hsl(var(--card))",
+                border: "1px solid hsl(var(--border))",
+                borderRadius: "calc(var(--radius) - 2px)",
+                cursor: "pointer",
+                transition: "all 0.2s ease-in-out",
               },
             },
           }}
