@@ -32,6 +32,7 @@ Create a `.env` file in the root directory:
 
 ```env
 REACT_APP_NOVU_APPLICATION_IDENTIFIER=your_novu_app_identifier
+REACT_APP_NOVU_SUBSCRIBER_ID=your_subscriber_id
 ```
 
 Get your application identifier from [Novu Dashboard](https://dashboard.novu.co/).
