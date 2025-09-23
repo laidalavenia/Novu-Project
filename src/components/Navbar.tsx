@@ -58,7 +58,7 @@ export default function Navbar({ className }: NavbarProps) {
             </AvatarFallback>
           </Avatar>
           <span className="hidden md:inline-block text-sm font-medium text-foreground">
-            John Doe
+            Laida L
           </span>
         </div>
       </div>

@@ -1,46 +1,91 @@
-# Getting Started with Create React App
+<p align="center">
+   <h2 align="center">Novu Dashboard Integration App</h2>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Novu Dashboard Integration App
 
-## Available Scripts
+Novu Dashboard Integration App demonstrates the integration of the Novu notification system with custom popup components. It showcases real-time notifications with a beautiful vignette popup overlay that displays notification details when users interact with the notification inbox.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Novu Inbox Integration**: Real-time notification system using Novu's React SDK
+- **Custom Notification Popup**: Beautiful vignette overlay popup for displaying notification details
+- **Auto-popup on Load**: Automatically displays the first notification when the application loads
+- **Click-to-View**: Users can click on notifications in the inbox to view them in the popup
+- **Responsive Design**: Fully responsive interface built with Tailwind CSS and shadcn/ui
+- **Modern UI Components**: Clean interface using shadcn/ui component library
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Tech Stack
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+This application was developed using modern technologies:
 
-### `npm test`
+- **React** - JavaScript library for building user interfaces
+- **TypeScript** - Type-safe JavaScript development
+- **@novu/react** - Novu React SDK for notification management
+- **shadcn/ui** - Modern UI component library
+- **Tailwind CSS** - Utility-first CSS framework for styling
+- **Lucide React** - Beautiful icon library
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Environment Variables
 
-### `npm run build`
+Create a `.env` file in the root directory:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```env
+REACT_APP_NOVU_APPLICATION_IDENTIFIER=your_novu_app_identifier
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Get your application identifier from [Novu Dashboard](https://dashboard.novu.co/).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Installation & Setup
 
-### `npm run eject`
+Clone the project
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+git clone https://github.com/laidalavenia/Novu-Project.git
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Go to the project directory
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+cd Novu-Project
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Install dependencies
 
-## Learn More
+```bash
+npm install
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Set up environment variables
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+# Copy .env.example to .env and fill in your Novu credentials
+cp .env.example .env
+```
+
+Start the development server
+
+```bash
+npm start
+```
+
+Build for production
+
+```bash
+npm run build
+```
+
+## Website Views
+
+<h2 align="center">1. Notification Poup (Vignette Effect) </h2>
+<p align="center">
+    <img width="500" src="src/assets/images/readme/NotificationPopup.png" />
+</p>
+<h2 align="center">2. Homepage </h2>
+<p align="center">
+    <img width="500" src="src/assets/images/readme/Homepage.png"/>
+</p>
+<h2 align="center">3. Notification Inbox </h2>
+<p align="center">
+    <img width="500" src="src/assets/images/readme/NotificationInbox.png" />
+</p>
