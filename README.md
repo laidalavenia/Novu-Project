@@ -80,7 +80,7 @@ npm run build
 
 <h2 align="center">1. Notification Poup (Vignette Effect) </h2>
 <p align="center">
-    <img width="500" src="src/assets/images/readme/NotificationPopup.png" />
+    <img width="500" src="src/assets/images/readme/UrgentNotif.png" />
 </p>
 <h2 align="center">2. Homepage </h2>
 <p align="center">
@@ -89,4 +89,10 @@ npm run build
 <h2 align="center">3. Notification Inbox </h2>
 <p align="center">
     <img width="500" src="src/assets/images/readme/NotificationInbox.png" />
+</p>
+<h2 align="center">3. All Notification Popup </h2>
+<p align="center">
+    <img width="500" src="src/assets/images/readme/UrgentNotif.png" />
+    <img width="500" src="src/assets/images/readme/HighNotif.png" />
+    <img width="500" src="src/assets/images/readme/NormalNotif.png" />
 </p>
